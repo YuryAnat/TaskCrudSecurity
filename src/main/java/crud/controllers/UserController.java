@@ -2,7 +2,6 @@ package crud.controllers;
 
 import crud.model.User;
 import crud.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,8 +13,11 @@ import java.util.List;
 
 @Controller
 public class UserController {
-    @Autowired
-    UserService userService;
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping(value = "/")
     public String printWelcome(ModelMap model) {
@@ -32,7 +34,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/edit")
-    public String editUserSubmit(@ModelAttribute User user){
+    public String editUserSubmit(@ModelAttribute User user) {
         userService.editUser(user);
         return "redirect:/";
     }
@@ -44,7 +46,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/add")
-    public String addUserSubmit(@ModelAttribute User user){
+    public String addUserSubmit(@ModelAttribute User user) {
         userService.saveUser(user);
         return "redirect:/";
     }

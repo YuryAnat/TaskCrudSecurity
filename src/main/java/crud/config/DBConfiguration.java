@@ -1,6 +1,5 @@
 package crud.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -20,15 +19,18 @@ import java.util.Properties;
 @EnableTransactionManagement
 @PropertySource("classpath:db.properties")
 public class DBConfiguration {
-    @Autowired
-    private Environment env;
+
+    private final Environment env;
+
+    public DBConfiguration(Environment env) {
+        this.env = env;
+    }
 
     @Bean
     public LocalContainerEntityManagerFactoryBean getEntityManagerFactoryBean() {
         LocalContainerEntityManagerFactoryBean localContainerEntityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
         localContainerEntityManagerFactoryBean.setJpaVendorAdapter(getJpaVendorAdapter());
         localContainerEntityManagerFactoryBean.setDataSource(getDataSource());
-        localContainerEntityManagerFactoryBean.setPersistenceUnitName("JpaPersistenceUnit");
         localContainerEntityManagerFactoryBean.setPackagesToScan("crud");
         localContainerEntityManagerFactoryBean.setJpaProperties(jpaProperties());
         return localContainerEntityManagerFactoryBean;
@@ -55,9 +57,9 @@ public class DBConfiguration {
     }
 
     @Bean
-    public PlatformTransactionManager txManager(){
-        JpaTransactionManager jpaTransactionManager = new JpaTransactionManager(
-                getEntityManagerFactoryBean().getObject());
+    public PlatformTransactionManager txManager() {
+        JpaTransactionManager jpaTransactionManager = new JpaTransactionManager(getEntityManagerFactoryBean().getObject());
+        jpaTransactionManager.setNestedTransactionAllowed(false);
         return jpaTransactionManager;
     }
 
