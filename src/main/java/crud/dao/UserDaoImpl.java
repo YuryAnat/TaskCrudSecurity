@@ -2,8 +2,6 @@ package crud.dao;
 
 import crud.model.User;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -13,7 +11,6 @@ import java.util.List;
 
 @Repository
 public class UserDaoImpl implements UserDao {
-
     private final EntityManager entityManager;
 
     public UserDaoImpl(EntityManagerFactory entityManagerFactory) {
@@ -28,6 +25,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void saveUser(User user) {
+        entityManager.joinTransaction();
         entityManager.persist(user);
     }
 
@@ -40,6 +38,7 @@ public class UserDaoImpl implements UserDao {
     public void removeUser(long id) {
         Query query = entityManager.createQuery("Delete FROM User u where u.id = :id");
         query.setParameter("id", id);
+        entityManager.joinTransaction();
         query.executeUpdate();
     }
 
@@ -48,5 +47,11 @@ public class UserDaoImpl implements UserDao {
         Query query = entityManager.createQuery("From User u where u.id = :id", User.class);
         query.setParameter("id", id);
         return (User) query.getSingleResult();
+    }
+
+    @Override
+    public User getUserByEmail(String email) {
+        User email1 = entityManager.createQuery("From User u Where u.email = :email", User.class).setParameter("email", email).getSingleResult();
+        return email1;
     }
 }

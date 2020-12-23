@@ -1,8 +1,6 @@
 package crud.services;
 
 import crud.model.User;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -16,4 +14,6 @@ public interface UserService {
     void removeUser(long id);
 
     User getUser(long id);
+
+    User getUserByEmail(String email);
 }
