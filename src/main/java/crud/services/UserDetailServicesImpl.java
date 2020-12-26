@@ -1,6 +1,7 @@
 package crud.services;
 
 import crud.dao.UserDao;
+import crud.model.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -16,6 +17,7 @@ public class UserDetailServicesImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        return userDao.getUserByEmail(s);
+        User userByEmail = userDao.getUserByEmail(s);
+        return userByEmail;
     }
 }

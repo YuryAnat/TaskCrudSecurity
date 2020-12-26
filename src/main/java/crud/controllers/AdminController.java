@@ -25,12 +25,8 @@ public class AdminController {
     }
 
     @GetMapping(value = "/admin/adminPage")
-    public String adminPage(Authentication authentication) {
-        if (authentication.isAuthenticated()) {
+    public String adminPage() {
             return "redirect:/adminPage";
-        } else {
-            return "redirect:/login";
-        }
     }
 
     @GetMapping(value = "/admin/listUser")

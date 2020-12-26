@@ -53,8 +53,7 @@ public class WebController {
         return "redirect:/";
     }
 
-//    @RequestMapping(value = "login", method = RequestMethod.GET)
-    @GetMapping(value = "/login")
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String loginPage() {
         return "login";
     }
