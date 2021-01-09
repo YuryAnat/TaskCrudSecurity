@@ -5,6 +5,8 @@ import crud.model.Role;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Set;
+
 @Service
 public class RoleServiceImpl implements RoleService {
     private RoleDao roleDao;
@@ -38,5 +40,10 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public Role getRoleByName(String role) {
         return roleDao.getRoleByName(role);
+    }
+
+    @Override
+    public Set<Role> getRoles() {
+        return roleDao.getRoles();
     }
 }

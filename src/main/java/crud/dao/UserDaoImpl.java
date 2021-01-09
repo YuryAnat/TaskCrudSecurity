@@ -55,7 +55,6 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User getUserByEmail(String email) {
-        User email1 = entityManager.createQuery("From User u Where u.email = :email", User.class).setParameter("email", email).getSingleResult();
-        return email1;
+        return entityManager.createQuery("From User u Where u.email = :email", User.class).setParameter("email", email).getSingleResult();
     }
 }

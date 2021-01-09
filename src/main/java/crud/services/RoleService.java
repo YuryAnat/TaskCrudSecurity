@@ -2,6 +2,8 @@ package crud.services;
 
 import crud.model.Role;
 
+import java.util.Set;
+
 public interface RoleService {
     void addRole(Role role);
 
@@ -12,4 +14,6 @@ public interface RoleService {
     void editRole(Role role);
 
     Role getRoleByName(String role);
+
+    Set<Role> getRoles();
 }

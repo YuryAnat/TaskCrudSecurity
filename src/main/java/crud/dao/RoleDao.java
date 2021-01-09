@@ -3,6 +3,7 @@ package crud.dao;
 import crud.model.Role;
 
 import java.util.List;
+import java.util.Set;
 
 public interface RoleDao {
     void addRole(Role role);
@@ -15,5 +16,5 @@ public interface RoleDao {
 
     Role getRoleByName(String name);
 
-    List<Role> getRoles();
+    Set<Role> getRoles();
 }

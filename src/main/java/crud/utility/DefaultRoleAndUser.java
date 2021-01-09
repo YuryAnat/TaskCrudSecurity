@@ -10,15 +10,17 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import javax.persistence.NoResultException;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 @Component
 public class DefaultRoleAndUser {
     private RoleService roleService;
     private UserService userService;
 
-    private String roleAdmin = "Administrators";
-    private String roleUser = "User";
-    private String roleAnon = "Anonymous";
+    private String roleAdmin = "ROLE_Administrators";
+    private String roleUser = "ROLE_User";
 
     private String adminEmail = "Admin@crud.ru";
     private String password = "admin";
@@ -34,14 +36,12 @@ public class DefaultRoleAndUser {
     private void addDefaultRoleAndUser() {
         Role adminRole;
         Role userRole;
-        Role anonRole;
         User admin;
 
         try {
             adminRole = roleService.getRoleByName(roleAdmin);
         } catch (NoResultException nre) {
             adminRole = new Role(this.roleAdmin);
-            adminRole.setRemoved(false);
             roleService.addRole(adminRole);
         }
 
@@ -49,22 +49,15 @@ public class DefaultRoleAndUser {
             userRole = roleService.getRoleByName(roleUser);
         } catch (NoResultException nre) {
             userRole = new Role(roleUser);
-            userRole.setRemoved(false);
             roleService.addRole(userRole);
-        }
-
-        try {
-            anonRole = roleService.getRoleByName(roleAnon);
-        } catch (NoResultException nre) {
-            anonRole = new Role(roleAnon);
-            anonRole.setRemoved(false);
-            roleService.addRole(anonRole);
         }
 
         try {
             admin = userService.getUserByEmail(adminEmail);
         } catch (NoResultException nre) {
-            admin = new User("Admin", "", adminEmail, password, Arrays.asList(adminRole, userRole, anonRole));
+            Set<Role> roles = new HashSet<>(Arrays.asList(adminRole, userRole));
+            admin = new User("Admin", "", adminEmail, password, roles);
+            admin.setEnabled(true);
             userService.saveUser(admin);
         }
     }

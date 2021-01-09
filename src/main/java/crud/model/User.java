@@ -5,21 +5,26 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "users")
 public class User implements UserDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
     @Column(unique = true)
     private String email;
     private String name;
     private String lastName;
     private String password;
+    @Transient
+    private String confirmPassword;
     @OneToMany
-    private List<Role> roles;
+    private Set<Role> roles;
     private boolean isEnabled;
     private boolean isCredentialsNonExpired;
     private boolean isAccountNonLocked;
@@ -28,13 +33,13 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public User(String name, String lastName, String email, String password, List<Role> roles) {
+    public User(String name, String lastName, String email, String password, Set<Role> roles) {
         this.name = name;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
         this.roles = roles;
-        this.isEnabled = true;
+        this.isEnabled = false;
         this.isCredentialsNonExpired = true;
         this.isAccountNonLocked = true;
         this.isAccountNonExpired = true;
@@ -76,11 +81,19 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    public List<Role> getRoles() {
+    public Set<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(List<Role> roles) {
+    public Set<String> getRolesNames(){
+        if (null != roles){
+            return roles.stream().map(Role::getRoleName).map(r -> r.replace( "ROLE_", "")).collect(Collectors.toSet());
+        }else {
+            return Collections.emptySet();
+        }
+    }
+
+    public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
 
@@ -100,6 +113,14 @@ public class User implements UserDetails {
         isAccountNonExpired = accountNonExpired;
     }
 
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles;
@@ -117,21 +138,21 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return isAccountNonExpired;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return isAccountNonLocked;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return isCredentialsNonExpired;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return isEnabled;
     }
 }

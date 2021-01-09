@@ -11,7 +11,6 @@ public class Role implements GrantedAuthority {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
     private String roleName;
-    private boolean isRemoved;
 
     public Role() {
     }
@@ -34,14 +33,6 @@ public class Role implements GrantedAuthority {
 
     public void setRoleName(String roleName) {
         this.roleName = roleName;
-    }
-
-    public boolean isRemoved() {
-        return isRemoved;
-    }
-
-    public void setRemoved(boolean removed) {
-        isRemoved = removed;
     }
 
     @Override

@@ -5,6 +5,7 @@ import crud.model.User;
 import crud.services.RoleService;
 import crud.services.UserService;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Set;
 
 @Controller
 public class AdminController {
@@ -24,29 +26,18 @@ public class AdminController {
         this.roleService = roleService;
     }
 
-    @GetMapping(value = "/admin/adminPage")
+    @GetMapping(value = "/admin/admin")
     public String adminPage() {
-            return "redirect:/adminPage";
+        return "admin";
     }
 
-    @GetMapping(value = "/admin/listUser")
-    public String listUser(ModelMap model, Authentication authentication){
+    @GetMapping(value = "/admin/users")
+    public String listUser(ModelMap model, Authentication authentication) {
         if (authentication.isAuthenticated()) {
             List<User> users = userService.getUsers();
             model.addAttribute("users", users);
-            return "adminUser";
-        }else {
-            return "redirect:/";
-        }
-    }
-
-    @GetMapping(value = "/admin/listRole")
-    public String listRole(ModelMap model, Authentication authentication){
-        if (authentication.isAuthenticated()) {
-            List<User> users = userService.getUsers();
-            model.addAttribute("users", users);
-            return "adminRole";
-        }else {
+            return "users";
+        } else {
             return "redirect:/";
         }
     }
@@ -55,39 +46,67 @@ public class AdminController {
     public String editUser(ModelMap model, @RequestParam long id) {
         User editUser = userService.getUser(id);
         model.addAttribute("user", editUser);
-        return "editUser";
+        return "edituser";
     }
 
     @PostMapping(value = "/admin/editUser")
-    public String editUserSubmit(@ModelAttribute User user) {
+    public String editUserSubmit(@ModelAttribute User user,
+                                 @RequestParam(name = "roleAdmin", defaultValue = "false") boolean isAdmin,
+                                 @RequestParam(name = "roleUser", defaultValue = "false") boolean isUser) {
+
+        Role role_administrators = roleService.getRoleByName("ROLE_Administrators");
+        Role role_user = roleService.getRoleByName("ROLE_User");
+        user.getRoles().clear();
+
+        if (isAdmin && !user.getRoles().contains(role_administrators)){
+            user.getRoles().add(role_administrators);
+        }else {
+            user.getRoles().remove(role_administrators);
+        }
+
+        if (isUser && !user.getRoles().contains(role_user)) {
+            user.getRoles().add(role_user);
+        } else {
+            user.getRoles().remove(role_user);
+        }
+
         userService.editUser(user);
-        return "redirect:/admin/listUser";
+        return "redirect:/admin/users";
     }
 
     @GetMapping(value = "/admin/removeUser")
     public String removeUser(@RequestParam int id) {
         userService.removeUser(id);
-        return "redirect:/admin/listUser";
+        return "redirect:/admin/users";
     }
 
-    @GetMapping(value = "/admin/editRole")
-    public String editRole(ModelMap model, @RequestParam long id) {
-        Role role = roleService.getRole(id);
-        model.addAttribute("role", role);
-        return "editRole";
+    @GetMapping("/admin/newUser")
+    public String newUserForm(ModelMap modelMap) {
+        modelMap.addAttribute("user", new User());
+        return "newUser";
     }
 
-    @PostMapping(value = "/admin/editRole")
-    public String editRoleSubmit(@ModelAttribute Role role) {
-        roleService.editRole(role);
-        return "redirect:/admin/listRole";
+    @PostMapping("/admin/newUser")
+    public String newUser(@ModelAttribute User user,
+                          @RequestParam(name = "roleAdmin", defaultValue = "false") boolean isAdmin,
+                          @RequestParam(name = "roleUser", defaultValue = "false") boolean isUser) {
+
+        if (isAdmin){
+            user.getRoles().add(roleService.getRoleByName("ROLE_Administrators"));
+        }
+
+        if (isUser) {
+            user.getRoles().add(roleService.getRoleByName("ROLE_User"));
+        }
+
+        userService.saveUser(user);
+        return "redirect:/admin/users";
     }
 
-    @GetMapping(value = "/admin/removeRole")
-    public String removeRole(@RequestParam int id) {
-        //TODO replace role service method deleteRole to remove by role id
-        Role role = roleService.getRole(id);
-        roleService.deleteRole(role);
-        return "redirect:/admin/listRole";
+    @GetMapping("/admin/roles")
+    public String listUsers(ModelMap map) {
+        Set<Role> roles = roleService.getRoles();
+        map.addAttribute("roles", roles);
+        return "roles";
     }
 }
