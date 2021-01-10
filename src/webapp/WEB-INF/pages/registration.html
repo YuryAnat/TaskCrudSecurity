@@ -3,12 +3,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title></title>
+    <title>Registration</title>
 </head>
 <body>
-<th:block ${#!string.isEmpty(error)}>
-    <p th:text="${error}"></p>
-</th:block>
 <div>
     <form action="#" th:action="@{/registration}" th:object="${user}" method="post">
         <label for="fname">First name:</label><br>

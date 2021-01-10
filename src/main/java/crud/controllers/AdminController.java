@@ -5,7 +5,6 @@ import crud.model.User;
 import crud.services.RoleService;
 import crud.services.UserService;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -91,15 +90,10 @@ public class AdminController {
                           @RequestParam(name = "roleAdmin", defaultValue = "false") boolean isAdmin,
                           @RequestParam(name = "roleUser", defaultValue = "false") boolean isUser) {
 
-        if (isAdmin){
-            user.getRoles().add(roleService.getRoleByName("ROLE_Administrators"));
-        }
-
-        if (isUser) {
-            user.getRoles().add(roleService.getRoleByName("ROLE_User"));
-        }
-
         userService.saveUser(user);
+        if (isAdmin) user.getRoles().add(roleService.getRoleByName("ROLE_Administrators"));
+        if (isUser) user.getRoles().add(roleService.getRoleByName("ROLE_User"));
+        userService.editUser(user);
         return "redirect:/admin/users";
     }
 

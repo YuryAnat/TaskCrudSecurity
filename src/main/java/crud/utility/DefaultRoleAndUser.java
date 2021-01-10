@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import javax.persistence.NoResultException;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -41,7 +40,7 @@ public class DefaultRoleAndUser {
         try {
             adminRole = roleService.getRoleByName(roleAdmin);
         } catch (NoResultException nre) {
-            adminRole = new Role(this.roleAdmin);
+            adminRole = new Role(roleAdmin);
             roleService.addRole(adminRole);
         }
 
