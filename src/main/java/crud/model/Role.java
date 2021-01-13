@@ -13,12 +13,13 @@ public class Role implements GrantedAuthority {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "role_seq_gen")
     @SequenceGenerator(name = "role_seq_gen", sequenceName = "ROLE_GEN")
-    @OrderBy
     private long id;
     private String roleName;
+    private boolean removed;
 
     public Role(String roleName) {
         this.roleName = roleName;
+        this.removed = true;
     }
 
     public String getSimpleRoleName(){

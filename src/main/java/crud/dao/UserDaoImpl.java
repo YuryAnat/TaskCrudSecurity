@@ -26,7 +26,6 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void saveUser(User user) {
-//        entityManager.joinTransaction();
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         entityManager.persist(user);
     }
@@ -40,7 +39,6 @@ public class UserDaoImpl implements UserDao {
     public void removeUser(long id) {
         Query query = entityManager.createQuery("Delete FROM User u where u.id = :id");
         query.setParameter("id", id);
-//        entityManager.joinTransaction();
         query.executeUpdate();
     }
 

@@ -28,7 +28,7 @@ public class User implements UserDetails {
     private String password;
     @Transient
     private String confirmPassword;
-    @OneToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     private Set<Role> roles;
     private boolean isEnabled;
     private boolean isCredentialsNonExpired;

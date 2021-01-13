@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -47,6 +48,6 @@ public class RoleDaoImpl implements RoleDao {
 
     @Override
     public Set<Role> getRoles() {
-        return new HashSet<>(entityManager.createQuery("From Role", Role.class).getResultList());
+        return new LinkedHashSet<>(entityManager.createQuery("From Role r Order by r.id ASC", Role.class).getResultList());
     }
 }

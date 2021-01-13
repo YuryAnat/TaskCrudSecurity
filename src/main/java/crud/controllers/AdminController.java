@@ -74,7 +74,12 @@ public class AdminController {
     @GetMapping("/admin/newUser")
     public String newUserForm(ModelMap modelMap) {
         Set<Role> roles = roleService.getRoles();
-        modelMap.addAttribute("user", new User());
+        User newUser = new User();
+        newUser.setEnabled(true);
+        newUser.setCredentialsNonExpired(true);
+        newUser.setAccountNonExpired(true);
+        newUser.setAccountNonLocked(true);
+        modelMap.addAttribute("user", newUser);
         modelMap.addAttribute("roles", roles);
         return "newUser";
     }
@@ -97,5 +102,32 @@ public class AdminController {
         Set<Role> roles = roleService.getRoles();
         map.addAttribute("roles", roles);
         return "roles";
+    }
+
+    @GetMapping("/admin/newRole")
+    public String newRole(ModelMap modelMap){
+        Role role = new Role();
+        modelMap.put("role", role);
+        return "newRole";
+    }
+
+    @PostMapping("/admin/newRole")
+    public String newRoleSubmit(@ModelAttribute Role role){
+        if (!role.getRoleName().startsWith("ROLE_")) role.setRoleName("ROLE_"+ role.getRoleName());
+        roleService.addRole(role);
+        return "redirect:/admin/roles";
+    }
+
+    @GetMapping(value = "/admin/editRole")
+    public String editRole(ModelMap model, @RequestParam long id) {
+        Role role = roleService.getRole(id);
+        model.addAttribute("role", role);
+        return "editRole";
+    }
+
+    @PostMapping(value = "/admin/editRole")
+    public String editRoleSubmit(@ModelAttribute Role role) {
+        roleService.editRole(role);
+        return "redirect:/admin/roles";
     }
 }

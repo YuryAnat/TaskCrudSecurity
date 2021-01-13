@@ -41,6 +41,7 @@ public class DefaultRoleAndUser {
             adminRole = roleService.getRoleByName(roleAdmin);
         } catch (NoResultException nre) {
             adminRole = new Role(roleAdmin);
+            adminRole.setRemoved(false);
             roleService.addRole(adminRole);
         }
 
@@ -48,6 +49,7 @@ public class DefaultRoleAndUser {
             userRole = roleService.getRoleByName(roleUser);
         } catch (NoResultException nre) {
             userRole = new Role(roleUser);
+            userRole.setRemoved(false);
             roleService.addRole(userRole);
         }
 
