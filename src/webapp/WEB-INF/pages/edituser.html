@@ -9,6 +9,7 @@
 <div>
     <div>
         <!--/*@thymesVar id="user" type="crud.model.User"*/-->
+        <!--/*@thymesVar id="role" type="crud.model.Role"*/-->
         <form action="#" th:action="@{/admin/editUser}" th:object="${user}" method="post">
             <fieldset th:fragment="user_data">
                 <legend>User data</legend>
@@ -31,14 +32,12 @@
                 </th:block>
             </fieldset>
             <fieldset th:fragment="user_role">
-                <legend>User roles</legend>
-                <label for="roleAdmin">Administrators</label>
-                <input id="roleAdmin" name="roleAdmin" type="checkbox"
-                       th:checked="${#lists.contains(user.getRolesNames(), 'Administrators')}"><br>
-                <label for="roleUser">User</label>
-                <input id="roleUser" name="roleUser" type="checkbox"
-                       th:checked="${#lists.contains(user.getRolesNames(), 'User')}"><br>
-                <input type="hidden" id="roles" name="roles" th:field="*{roles}" th:value="${user.roles}"><br>
+                <legend>User role</legend>
+                <input th:type="hidden" th:field="*{roles}" th:value="${user.roles}">
+                <div th:each="role : ${roles}">
+                    <label th:for="'role_' + ${role.id}" th:text="${role.getSimpleRoleName()}"></label>
+                    <input th:id="'role_' + ${role.id}" th:name="'role_' + ${role.id}" type="checkbox" th:checked="${user.getRolesNames().contains(role.getSimpleRoleName())}"/><br>
+                </div>
             </fieldset>
             <fieldset th:fragment="user_settings">
                 <legend>Profile settings</legend>
@@ -53,7 +52,7 @@
                        th:checked="${user.credentialsNonExpired}" th:field="*{credentialsNonExpired}"><br>
                 <label for="isAccountNonLocked">Account non locked</label>
                 <input id="isAccountNonLocked" name="isAccountNonLocked" type="checkbox"
-                       th:checked="${user.accountNonLocked}" th:field="*{accountNonLocked}"><br>
+                           th:checked="${user.accountNonLocked}" th:field="*{accountNonLocked}"><br>
             </fieldset>
             <br><input type="submit" value="Save">
         </form>

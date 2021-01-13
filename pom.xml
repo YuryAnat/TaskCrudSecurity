@@ -96,7 +96,5 @@
             <version>1.18.16.0</version>
             <scope>provided</scope>
         </dependency>
-
     </dependencies>
-
 </project>

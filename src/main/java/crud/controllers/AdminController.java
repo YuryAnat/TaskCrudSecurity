@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Controller
 public class AdminController {
@@ -44,31 +46,21 @@ public class AdminController {
     @GetMapping(value = "/admin/editUser")
     public String editUser(ModelMap model, @RequestParam long id) {
         User editUser = userService.getUser(id);
+        Set<Role> roles = roleService.getRoles();
         model.addAttribute("user", editUser);
+        model.addAttribute("roles", roles);
         return "edituser";
     }
 
     @PostMapping(value = "/admin/editUser")
-    public String editUserSubmit(@ModelAttribute User user,
-                                 @RequestParam(name = "roleAdmin", defaultValue = "false") boolean isAdmin,
-                                 @RequestParam(name = "roleUser", defaultValue = "false") boolean isUser) {
-
-        Role role_administrators = roleService.getRoleByName("ROLE_Administrators");
-        Role role_user = roleService.getRoleByName("ROLE_User");
+    public String editUserSubmit(@ModelAttribute User user, @RequestParam Map<String, String> allParams) {
         user.getRoles().clear();
-
-        if (isAdmin && !user.getRoles().contains(role_administrators)){
-            user.getRoles().add(role_administrators);
-        }else {
-            user.getRoles().remove(role_administrators);
-        }
-
-        if (isUser && !user.getRoles().contains(role_user)) {
-            user.getRoles().add(role_user);
-        } else {
-            user.getRoles().remove(role_user);
-        }
-
+        Set<Role> roles = allParams.entrySet().stream()
+                .filter(e -> e.getKey().startsWith("role_"))
+                .filter(e -> e.getValue().equals("on"))
+                .map(e -> roleService.getRole(Integer.parseInt(e.getKey().replace("role_", ""))))
+                .collect(Collectors.toSet());
+        user.getRoles().addAll(roles);
         userService.editUser(user);
         return "redirect:/admin/users";
     }
@@ -81,18 +73,21 @@ public class AdminController {
 
     @GetMapping("/admin/newUser")
     public String newUserForm(ModelMap modelMap) {
+        Set<Role> roles = roleService.getRoles();
         modelMap.addAttribute("user", new User());
+        modelMap.addAttribute("roles", roles);
         return "newUser";
     }
 
     @PostMapping("/admin/newUser")
-    public String newUser(@ModelAttribute User user,
-                          @RequestParam(name = "roleAdmin", defaultValue = "false") boolean isAdmin,
-                          @RequestParam(name = "roleUser", defaultValue = "false") boolean isUser) {
-
+    public String newUser(@ModelAttribute User user, @RequestParam Map<String, String> allParams) {
+        Set<Role> roles = allParams.entrySet().stream()
+                .filter(e -> e.getKey().startsWith("role_"))
+                .filter(e -> e.getValue().equals("on"))
+                .map(e -> roleService.getRole(Integer.parseInt(e.getKey().replace("role_", ""))))
+                .collect(Collectors.toSet());
         userService.saveUser(user);
-        if (isAdmin) user.getRoles().add(roleService.getRoleByName("ROLE_Administrators"));
-        if (isUser) user.getRoles().add(roleService.getRoleByName("ROLE_User"));
+        user.setRoles(roles);
         userService.editUser(user);
         return "redirect:/admin/users";
     }

@@ -4,14 +4,12 @@ import crud.model.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Query;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import java.util.List;
 
 @Repository
 public class UserDaoImpl implements UserDao {
+    @PersistenceContext
     private final EntityManager entityManager;
     private final PasswordEncoder passwordEncoder;
 
@@ -28,7 +26,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void saveUser(User user) {
-        entityManager.joinTransaction();
+//        entityManager.joinTransaction();
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         entityManager.persist(user);
     }
@@ -42,7 +40,7 @@ public class UserDaoImpl implements UserDao {
     public void removeUser(long id) {
         Query query = entityManager.createQuery("Delete FROM User u where u.id = :id");
         query.setParameter("id", id);
-        entityManager.joinTransaction();
+//        entityManager.joinTransaction();
         query.executeUpdate();
     }
 
