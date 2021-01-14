@@ -75,10 +75,6 @@ public class AdminController {
     public String newUserForm(ModelMap modelMap) {
         Set<Role> roles = roleService.getRoles();
         User newUser = new User();
-        newUser.setEnabled(true);
-        newUser.setCredentialsNonExpired(true);
-        newUser.setAccountNonExpired(true);
-        newUser.setAccountNonLocked(true);
         modelMap.addAttribute("user", newUser);
         modelMap.addAttribute("roles", roles);
         return "newUser";

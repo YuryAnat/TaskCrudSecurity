@@ -39,21 +39,21 @@
                     <input th:id="'role_' + ${role.id}" th:name="'role_' + ${role.id}" type="checkbox" th:checked="${user.getRolesNames().contains(role.getSimpleRoleName())}"/><br>
                 </div>
             </fieldset>
-            <fieldset th:fragment="user_settings">
-                <legend>Profile settings</legend>
-                <label for="enabled">Enable</label>
-                <input id="enabled" name="enabled" type="checkbox" th:checked="${user.enabled}"
-                       th:field="*{enabled}"><br>
-                <label for="isAccountNonExpired">Account non expired</label>
-                <input id="isAccountNonExpired" name="isAccountNonExpired" type="checkbox"
-                       th:checked="${user.accountNonExpired}" th:field="*{accountNonExpired}"><br>
-                <label for="isCredentialsNonExpired">Credentials non expired</label>
-                <input id="isCredentialsNonExpired" name="isCredentialsNonExpired" type="checkbox"
-                       th:checked="${user.credentialsNonExpired}" th:field="*{credentialsNonExpired}"><br>
-                <label for="isAccountNonLocked">Account non locked</label>
-                <input id="isAccountNonLocked" name="isAccountNonLocked" type="checkbox"
-                           th:checked="${user.accountNonLocked}" th:field="*{accountNonLocked}"><br>
-            </fieldset>
+<!--            <fieldset th:fragment="user_settings">-->
+<!--                <legend>Profile settings</legend>-->
+<!--                <label for="enabled">Enable</label>-->
+<!--                <input id="enabled" name="enabled" type="checkbox" th:checked="${user.enabled}"-->
+<!--                       th:field="*{enabled}"><br>-->
+<!--                <label for="isAccountNonExpired">Account non expired</label>-->
+<!--                <input id="isAccountNonExpired" name="isAccountNonExpired" type="checkbox"-->
+<!--                       th:checked="${user.accountNonExpired}" th:field="*{accountNonExpired}"><br>-->
+<!--                <label for="isCredentialsNonExpired">Credentials non expired</label>-->
+<!--                <input id="isCredentialsNonExpired" name="isCredentialsNonExpired" type="checkbox"-->
+<!--                       th:checked="${user.credentialsNonExpired}" th:field="*{credentialsNonExpired}"><br>-->
+<!--                <label for="isAccountNonLocked">Account non locked</label>-->
+<!--                <input id="isAccountNonLocked" name="isAccountNonLocked" type="checkbox"-->
+<!--                           th:checked="${user.accountNonLocked}" th:field="*{accountNonLocked}"><br>-->
+<!--            </fieldset>-->
             <br><input type="submit" value="Save">
         </form>
     </div>

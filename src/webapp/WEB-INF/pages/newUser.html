@@ -12,7 +12,7 @@
         <form action="#" th:action="@{/admin/newUser}" th:object="${user}" method="post">
             <fieldset th:replace="edituser :: user_data"></fieldset>
             <fieldset th:replace="edituser :: user_role"></fieldset>
-            <fieldset th:replace="edituser :: user_settings"></fieldset>
+<!--            <fieldset th:replace="edituser :: user_settings"></fieldset>-->
             <br><input type="submit" value="Save">
         </form>
     </div>

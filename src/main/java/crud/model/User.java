@@ -28,7 +28,7 @@ public class User implements UserDetails {
     private String password;
     @Transient
     private String confirmPassword;
-    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     private Set<Role> roles;
     private boolean isEnabled;
     private boolean isCredentialsNonExpired;
@@ -41,10 +41,6 @@ public class User implements UserDetails {
         this.email = email;
         this.password = password;
         this.roles = roles;
-        this.isEnabled = false;
-        this.isCredentialsNonExpired = true;
-        this.isAccountNonLocked = true;
-        this.isAccountNonExpired = true;
     }
 
     public Set<String> getRolesNames(){
@@ -72,21 +68,21 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return isAccountNonExpired;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return isAccountNonLocked;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return isCredentialsNonExpired;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return isEnabled;
+        return true;
     }
 }

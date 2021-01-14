@@ -58,7 +58,6 @@ public class DefaultRoleAndUser {
         } catch (NoResultException nre) {
             Set<Role> roles = new HashSet<>(Arrays.asList(adminRole, userRole));
             admin = new User("Admin", "", adminEmail, password, roles);
-            admin.setEnabled(true);
             userService.saveUser(admin);
         }
     }

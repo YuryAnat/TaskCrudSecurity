@@ -2,7 +2,6 @@ package crud.controllers;
 
 import crud.model.User;
 import crud.services.UserService;
-import org.hibernate.annotations.Parameter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.stereotype.Controller;
