@@ -30,10 +30,6 @@ public class User implements UserDetails {
     private String confirmPassword;
     @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     private Set<Role> roles;
-    private boolean isEnabled;
-    private boolean isCredentialsNonExpired;
-    private boolean isAccountNonLocked;
-    private boolean isAccountNonExpired;
 
     public User(String name, String lastName, String email, String password, Set<Role> roles) {
         this.name = name;
